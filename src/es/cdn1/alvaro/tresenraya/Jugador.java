@@ -8,6 +8,7 @@ public class Jugador {
 
     private String nombre;
     private char cruzOCirculo;
+    private boolean esGanador;
 
     /**
      * Constrcutor de la clase Jugador
@@ -18,6 +19,7 @@ public class Jugador {
     public Jugador(String nombre, char cruzOCirculo) {
         this.nombre = nombre;
         this.cruzOCirculo = cruzOCirculo;
+        this.esGanador = false;
     }
 
     /**
@@ -31,5 +33,13 @@ public class Jugador {
 
     public String getNombre() {
         return this.nombre;
+    }
+
+    public boolean getEsGanador() {
+        return this.esGanador;
+    }
+
+    public void setEsGanador(boolean esGanador) {
+        this.esGanador = esGanador;
     }
 }

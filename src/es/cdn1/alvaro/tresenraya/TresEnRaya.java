@@ -11,18 +11,27 @@ public class TresEnRaya {
     }
 
     public void iniciar() {
-        boolean acabar = false;
+        boolean fin = false;
+        Jugador jugador;
 
         this.tablero.empieza(jugador1, jugador2);
 
         do {
+            jugador = this.tablero.obtenerTurno();
+
             this.tablero.mostrarTablero();
 
             if (this.tablero.getContador() == 9) {
-                acabar = true;
-                System.out.println('\n' + "Empate");
+                fin = true;
+                System.out.println('\n' + "Ha sido un empate.");
+            } else if (jugador.getEsGanador()) {
+                fin = true;
+                System.out.println("¡Fin de partida!");
+                System.out.println("Gana el jugador: \"" + jugador.getNombre() + '"');
+            } else {
+                this.tablero.jugar(jugador);
             }
 
-        } while (!acabar);
+        } while (!fin);
     }
 }

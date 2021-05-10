@@ -1,6 +1,9 @@
 package es.cdn1.alvaro.tresenraya;
 
-import java.lang.Math;
+import java.util.Arrays;
+import java.util.InputMismatchException;
+import java.util.Random;
+import java.util.Scanner;
 
 /**
  * Clase que simula un tablero de TresEnRaya
@@ -16,8 +19,6 @@ public class Tablero {
     private Jugador j1; // Jugador 1
     private Jugador j2; // Jugador 2
 
-    private final int[][] combinacionesGanadoras;
-
     /**
      * Constructor de la clase Tablero
      */
@@ -30,11 +31,6 @@ public class Tablero {
                 this.valores[i][j] = '_';
             }
         }
-
-        this.combinacionesGanadoras = new int[][]{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, // horizontales
-                {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, // verticales
-                {0, 4, 8}, {2, 4, 6} // diagonales
-        };
     }
 
     public int getFilasTablero() {
@@ -71,12 +67,13 @@ public class Tablero {
     public void empieza(String j1, String j2) {
         Jugador jugador1 = new Jugador(j1, CRUZ);
         Jugador jugador2 = new Jugador(j2, CIRCULO);
+        Random rand = new Random(System.currentTimeMillis());
 
-        int dado1 = (int) (Math.random() * 6 + 1);
-        int dado2 = (int) (Math.random() * 6 + 1);
+        int dado1 = rand.nextInt(6) + 1;
+        int dado2 = rand.nextInt(6) + 1;
 
-        System.out.println("El jugador " + j1 + " tira el dado: " + dado1);
-        System.out.println("El jugador " + j2 + " tira el dado: " + dado2);
+        System.out.println("El jugador \"" + j1 + "\" tira el dado: " + dado1);
+        System.out.println("El jugador \"" + j2 + "\" tira el dado: " + dado2);
 
         if (dado1 > dado2) {
             setJugadores(jugador1, jugador2);
@@ -85,7 +82,7 @@ public class Tablero {
         } else {
             setJugadores(jugador1, jugador2);
         }
-        System.out.println("Empieza: " + this.j1.getNombre() + ", con: " + this.j1.obtenerMarca());
+        System.out.println("Empieza: \"" + this.j1.getNombre() + "\", jugando con: " + this.j1.obtenerMarca());
     }
 
     /**
@@ -97,9 +94,9 @@ public class Tablero {
         Jugador jugador;
 
         if (contador % 2 == 0) {
-            jugador = this.j2;
-        } else {
             jugador = this.j1;
+        } else {
+            jugador = this.j2;
         }
 
         return jugador;
@@ -130,7 +127,184 @@ public class Tablero {
     /**
      * Permite al jugador poner su marca ('X' o 'O') en la posicion que desee
      */
-    public void jugar() {
+    public void jugar(Jugador jugador) {
+        boolean status = false;
+        Scanner sc = new Scanner(System.in);
 
+        do {
+            boolean correcto = false;
+
+            String letraFila;
+            int fila = 0, col;
+
+            do {
+                System.out.println("Jugador: \"" + jugador.getNombre() + "\" introduzca la fila:");
+                letraFila = sc.next();
+
+                if (letraFila.isBlank()) {
+                    System.out.println("No ha introducido una fila, por favor introduzca una\n");
+                } else {
+                    switch (letraFila.toLowerCase()) {
+                        case "a":
+                            fila = 0;
+                            correcto = true;
+                            break;
+
+                        case "b":
+                            fila = 1;
+                            correcto = true;
+                            break;
+
+                        case "c":
+                            fila = 2;
+                            correcto = true;
+                            break;
+
+                        default:
+                            System.out.println("Fila incorrecta, por favor introduzcala de nuevo\n");
+                            break;
+                    }
+                }
+            } while (!correcto);
+
+            correcto = false;
+
+            do {
+                col = 0;
+
+                System.out.println("Jugador: \"" + jugador.getNombre() + "\" introduzca la columna:");
+
+                try {
+                    col = sc.nextInt() - 1;
+                    correcto = true;
+
+                } catch (InputMismatchException e) {
+                    System.out.println("Por favor, introduzca un numero\n");
+                    sc.next();
+                }
+
+            } while (!correcto);
+
+            try {
+                if (this.valores[fila][col] != '_') {
+                    System.out.println("Posicion ya ocupada\n");
+                } else {
+                    this.valores[fila][col] = jugador.obtenerMarca();
+                    status = true;
+                }
+
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("Posicion no valida\n");
+            }
+
+        } while (!status);
+
+        if (!comprobarTresEnRaya(jugador)) {
+            this.contador++;
+        }
+    }
+
+    /**
+     * Metodo para comprobar si alguien ha ganado
+     *
+     * @param jugador El jugador del cual comprobaremos si ha hecho un "Tres en raya"
+     * @return <code>true</code> si hay un ganador y <code>false</code> si no
+     */
+    public boolean comprobarTresEnRaya(Jugador jugador) {
+        boolean tresEnRaya = false;
+        char marca = jugador.obtenerMarca();
+
+        if (comprobarFilas(marca)) {
+            tresEnRaya = true;
+            jugador.setEsGanador(true);
+        } else if (comprobarColumnas(marca)) {
+            tresEnRaya = true;
+            jugador.setEsGanador(true);
+        } else if (comprobarDiagonales(marca)) {
+            tresEnRaya = true;
+            jugador.setEsGanador(true);
+        }
+
+        return tresEnRaya;
+    }
+
+    /**
+     * Comprueba si hay un "TresEnRaya" en alguna fila
+     *
+     * @param marca La marca que el jugador utliza ('X' o 'O')
+     * @return <code>true</code> si hay una fila con "Tres en raya" y <code>false</code> si no
+     */
+    private boolean comprobarFilas(char marca) {
+        boolean tresEnRayaFila = false;
+        char[] fila = {marca, marca, marca};
+
+        for (char[] filas : this.valores) {
+            if (Arrays.equals(fila, filas)) {
+                tresEnRayaFila = true;
+                break;
+            }
+        }
+
+        return tresEnRayaFila;
+    }
+
+    /**
+     * Comprueba si hay un "Tres en raya" en alguna columna
+     *
+     * @param marca La marca que el jugador utliza ('X' o 'O')
+     * @return <code>true</code> si hay una columna con "Tres en raya" y <code>false</code> si no
+     */
+    private boolean comprobarColumnas(char marca) {
+        boolean tresEnRayaCol = false;
+
+        char[] col = {marca, marca, marca};
+
+        char[] col1 = {valores[0][0], valores[1][0], valores[2][0]};
+        char[] col2 = {valores[0][1], valores[1][1], valores[2][1]};
+        char[] col3 = {valores[0][2], valores[1][2], valores[2][2]};
+
+        if (Arrays.equals(col, col1)) {
+            tresEnRayaCol = true;
+        } else if (Arrays.equals(col, col2)) {
+            tresEnRayaCol = true;
+        } else if (Arrays.equals(col, col3)) {
+            tresEnRayaCol = true;
+        }
+
+        return tresEnRayaCol;
+    }
+
+    /**
+     * Comprueba si hay un "Tres en raya" en alguna diagonal
+     *
+     * @param marca La marca que el jugador utliza ('X' o 'O')
+     * @return <code>true</code> si hay una diagonal con "Tres en raya" y <code>false</code> si no
+     */
+    private boolean comprobarDiagonales(char marca) {
+        boolean tresEnRayaDiag = false;
+
+        char[] diagonal = {marca, marca, marca};
+        char[] diagonalPrincipal = new char[this.valores.length];
+        char[] diagonalSecundaria = new char[this.valores.length];
+
+        // Anadimos valores a las diagonales
+        for (int i = 0; i < this.valores.length; i++) {
+            for (int j = 0; j < this.valores[0].length; j++) {
+                if (i == j) {
+                    diagonalPrincipal[i] = this.valores[i][j];
+                }
+                if (i + j == this.valores.length - 1) {
+                    diagonalSecundaria[i] = this.valores[i][j];
+                }
+            }
+        }
+
+        if (Arrays.equals(diagonal, diagonalPrincipal)) {
+            tresEnRayaDiag = true;
+        } else if (Arrays.equals(diagonal, diagonalSecundaria)) {
+            tresEnRayaDiag = true;
+        }
+
+        return tresEnRayaDiag;
     }
 }
