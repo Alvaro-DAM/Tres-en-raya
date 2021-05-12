@@ -18,12 +18,13 @@ public class TresEnRayaMain {
 
             if (j1.isBlank() || j2.isBlank()) {
                 System.out.println('\n' + "Por favor, no introduza nombre/s vacio/s" + '\n');
-            }
-            else {
+            } else {
                 status = true;
             }
 
         } while (!status);
+
+        sc.close();
 
         new TresEnRaya(j1, j2).iniciar();
     }

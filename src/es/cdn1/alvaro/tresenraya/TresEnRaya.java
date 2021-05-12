@@ -1,11 +1,15 @@
 package es.cdn1.alvaro.tresenraya;
 
+import java.io.BufferedWriter;
+
 public class TresEnRaya {
     private Tablero tablero;
     private String jugador1, jugador2;
+    private Log log;
 
     public TresEnRaya(String nombreJ1, String nombreJ2) {
-        this.tablero = new Tablero();
+        this.log = new Log();
+        this.tablero = new Tablero(this.log);
         this.jugador1 = nombreJ1;
         this.jugador2 = nombreJ2;
     }
@@ -13,6 +17,7 @@ public class TresEnRaya {
     public void iniciar() {
         boolean fin = false;
         Jugador jugador;
+        String mensaje;
 
         this.tablero.empieza(jugador1, jugador2);
 
@@ -23,11 +28,25 @@ public class TresEnRaya {
 
             if (this.tablero.getContador() == 9) {
                 fin = true;
-                System.out.println('\n' + "Ha sido un empate.");
+                mensaje = "Ha sido un empate.";
+
+                this.log.escribir(mensaje);
+                System.out.println('\n' + mensaje);
+
+                this.log.acabar();
+
             } else if (jugador.getEsGanador()) {
                 fin = true;
-                System.out.println("¡Fin de partida!");
-                System.out.println("Gana el jugador: \"" + jugador.getNombre() + '"');
+
+                mensaje = "¡Fin de partida!";
+                System.out.println(mensaje);
+                this.log.escribir(mensaje);
+
+                mensaje = "Gana el jugador: \"" + jugador.getNombre() + '"';
+                System.out.println(mensaje);
+                this.log.escribir(mensaje);
+
+                this.log.acabar();
             } else {
                 this.tablero.jugar(jugador);
             }

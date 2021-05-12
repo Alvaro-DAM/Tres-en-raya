@@ -11,18 +11,18 @@ import java.util.Scanner;
 
 public class Tablero {
     private final char[][] valores;
-    private final char CRUZ = 'X';
-    private final char CIRCULO = 'O';
 
     private int contador; // Contador para numero maximo de movimientos (9)
 
     private Jugador j1; // Jugador 1
     private Jugador j2; // Jugador 2
 
+    private Log log;
+
     /**
      * Constructor de la clase Tablero
      */
-    public Tablero() {
+    public Tablero(Log log) {
         this.valores = new char[3][3];
 
         // Escribimos un tablero vacio
@@ -31,6 +31,8 @@ public class Tablero {
                 this.valores[i][j] = '_';
             }
         }
+
+        this.log = log;
     }
 
     public int getFilasTablero() {
@@ -65,15 +67,26 @@ public class Tablero {
      * @param j2 El nombre del segundo jugador
      */
     public void empieza(String j1, String j2) {
-        Jugador jugador1 = new Jugador(j1, CRUZ);
-        Jugador jugador2 = new Jugador(j2, CIRCULO);
+        char cruz = 'X';
+        char circulo = 'O';
+
+        Jugador jugador1 = new Jugador(j1, cruz);
+        Jugador jugador2 = new Jugador(j2, circulo);
+
         Random rand = new Random(System.currentTimeMillis());
+
+        String mensaje;
 
         int dado1 = rand.nextInt(6) + 1;
         int dado2 = rand.nextInt(6) + 1;
 
-        System.out.println("El jugador \"" + j1 + "\" tira el dado: " + dado1);
-        System.out.println("El jugador \"" + j2 + "\" tira el dado: " + dado2);
+        mensaje = "El jugador \"" + j1 + "\" tira el dado: " + dado1;
+        System.out.println(mensaje);
+        this.log.escribir(mensaje);
+
+        mensaje = "El jugador \"" + j2 + "\" tira el dado: " + dado2;
+        System.out.println(mensaje);
+        this.log.escribir(mensaje);
 
         if (dado1 > dado2) {
             setJugadores(jugador1, jugador2);
@@ -82,7 +95,10 @@ public class Tablero {
         } else {
             setJugadores(jugador1, jugador2);
         }
-        System.out.println("Empieza: \"" + this.j1.getNombre() + "\", jugando con: " + this.j1.obtenerMarca());
+
+        mensaje = "Empieza: \"" + this.j1.getNombre() + "\", jugando con: " + this.j1.obtenerMarca();
+        System.out.println(mensaje);
+        this.log.escribir(mensaje);
     }
 
     /**
@@ -129,6 +145,7 @@ public class Tablero {
      */
     public void jugar(Jugador jugador) {
         boolean status = false;
+
         Scanner sc = new Scanner(System.in);
 
         do {
@@ -189,6 +206,10 @@ public class Tablero {
                 if (this.valores[fila][col] != '_') {
                     System.out.println("Posicion ya ocupada\n");
                 } else {
+                    this.log.escribir("El jugador " + jugador.getNombre() +
+                            " ha introducido un/a '" + jugador.obtenerMarca() +
+                            "' en la posicion " + fila + ',' + ' ' + col);
+
                     this.valores[fila][col] = jugador.obtenerMarca();
                     status = true;
                 }
@@ -217,12 +238,20 @@ public class Tablero {
         if (comprobarFilas(marca)) {
             tresEnRaya = true;
             jugador.setEsGanador(true);
+
+            this.log.escribir("El jugador " + jugador.getNombre() + " ha hecho un \"Tres en raya\" por filas");
         } else if (comprobarColumnas(marca)) {
             tresEnRaya = true;
             jugador.setEsGanador(true);
+
+            this.log.escribir("El jugador " + jugador.getNombre() +
+                    " ha hecho un \"Tres en raya\" por columnas");
         } else if (comprobarDiagonales(marca)) {
             tresEnRaya = true;
             jugador.setEsGanador(true);
+
+            this.log.escribir("El jugador " + jugador.getNombre()
+                    + " ha hecho un \"Tres en raya\" por diagonal");
         }
 
         return tresEnRaya;
