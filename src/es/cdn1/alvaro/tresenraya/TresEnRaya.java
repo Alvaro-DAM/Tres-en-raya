@@ -1,12 +1,16 @@
 package es.cdn1.alvaro.tresenraya;
 
-import java.io.BufferedWriter;
-
 public class TresEnRaya {
     private Tablero tablero;
     private String jugador1, jugador2;
     private Log log;
 
+    /**
+     * Constructor de la clase TresEnRaya
+     *
+     * @param nombreJ1 nombre del primer jugador
+     * @param nombreJ2 nombre del segundo jugador
+     */
     public TresEnRaya(String nombreJ1, String nombreJ2) {
         this.log = new Log();
         this.tablero = new Tablero(this.log);
@@ -14,6 +18,9 @@ public class TresEnRaya {
         this.jugador2 = nombreJ2;
     }
 
+    /**
+     * Metodo encargado de iniciar el juego
+     */
     public void iniciar() {
         boolean fin = false;
         Jugador jugador;

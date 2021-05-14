@@ -5,10 +5,6 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
-/**
- * Clase que simula un tablero de TresEnRaya
- */
-
 public class Tablero {
     private final char[][] valores;
 
@@ -35,26 +31,21 @@ public class Tablero {
         this.log = log;
     }
 
-    public int getFilasTablero() {
-        return this.valores.length;
-    }
-
-    public int getColumnasTablero() {
-        return this.valores[0].length;
-    }
-
+    /**
+     * Metodo para obtener el numero de movimientos realizados
+     *
+     * @return el numero actual de movimientos que se han realizado hasta ahora
+     */
     public int getContador() {
         return this.contador;
     }
 
-    public char getValor(int fila, int columna) {
-        return this.valores[fila][columna];
-    }
-
-    public void setValores(int fila, int columna, char valor) {
-        this.valores[fila][columna] = valor;
-    }
-
+    /**
+     * Metodo para establecer quien sera el primer jugador y quien sera el segundo
+     *
+     * @param j1 El jugador que ira primero
+     * @param j2 El jugador que ira segundo
+     */
     public void setJugadores(Jugador j1, Jugador j2) {
         this.j1 = j1;
         this.j2 = j2;
@@ -102,7 +93,7 @@ public class Tablero {
     }
 
     /**
-     * Metodo para saber a quien le toca
+     * Metodo para saber de quien es el turno
      *
      * @return El jugador del cual es el turno
      */
@@ -258,7 +249,7 @@ public class Tablero {
     }
 
     /**
-     * Comprueba si hay un "TresEnRaya" en alguna fila
+     * Comprueba si hay un "Tres en raya" en alguna fila
      *
      * @param marca La marca que el jugador utliza ('X' o 'O')
      * @return <code>true</code> si hay una fila con "Tres en raya" y <code>false</code> si no

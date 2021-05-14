@@ -1,7 +1,3 @@
-/**
- * Clase que simula un "log"
- */
-
 package es.cdn1.alvaro.tresenraya;
 
 import java.io.BufferedWriter;
@@ -14,7 +10,7 @@ public class Log {
     private BufferedWriter log;
 
     /**
-     * Constrcutor de la clase "Log"
+     * Constructor de la clase "Log"
      */
     public Log() {
         String date = new SimpleDateFormat("dd-MM-yyyy_HHmm").format(new Date());
