@@ -6,6 +6,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Clase que representa un registro de los eventos ocurridos durante la partida de "Tres en raya"
+ *
+ * @author Alvaro Pisabarros - CDN1
+ */
+
 public class Log {
     private BufferedWriter log;
 

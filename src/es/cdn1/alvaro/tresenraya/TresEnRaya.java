@@ -1,5 +1,11 @@
 package es.cdn1.alvaro.tresenraya;
 
+/**
+ * Clase para jugar al "Tres en raya" en linea de comandos
+ *
+ * @author Alvaro Pisabarros - CDN1
+ */
+
 public class TresEnRaya {
     private Tablero tablero;
     private String jugador1, jugador2;

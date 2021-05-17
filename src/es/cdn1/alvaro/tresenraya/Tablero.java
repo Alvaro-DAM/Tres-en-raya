@@ -5,6 +5,12 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * Clase que simula un tablero de "Tres en Raya"
+ *
+ * @author Alvaro Pisabarros - CDN1
+ */
+
 public class Tablero {
     private final char[][] valores;
 

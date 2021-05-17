@@ -1,13 +1,14 @@
-/**
- * Clase para jugar al "Tres en raya" en linea de comandos
- * @author Alvaro Pisabarros - CDN1
- */
-
 package es.cdn1.alvaro.tresenraya;
 
 import java.util.Scanner;
 
 public class TresEnRayaMain {
+
+    /**
+     * Metodo que ejecuta la "app"
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String j1, j2;

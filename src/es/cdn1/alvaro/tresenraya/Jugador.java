@@ -1,5 +1,11 @@
 package es.cdn1.alvaro.tresenraya;
 
+/**
+ * Clase que representa al jugador
+ *
+ * @author Alvaro Pisabarros - CDN1
+ */
+
 public class Jugador {
 
     private String nombre;
